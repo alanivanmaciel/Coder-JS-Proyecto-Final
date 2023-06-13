@@ -128,7 +128,7 @@ const registroMovimiento = async () => {
         registroMovimientoForm.addEventListener("submit", async (e) => {
             e.preventDefault();
             try {
-                const response = await fetch("/json/movimientos.json");
+                const response = await fetch("json/movimientos.json");
                 const data = await response.json();
                 const movimientosData = data.movimientos || [];
                 const idValue = movimientosData.reduce((maxId, movimiento) => {
@@ -140,7 +140,7 @@ const registroMovimiento = async () => {
                 const movimiento = new Ingreso(idValue + 1, categoria, subcategoria, monto);
                 movimientosData.push(movimiento);
                 try {
-                    await fetch("/json/movimientos.json", {
+                    await fetch("json/movimientos.json", {
                         method: "PUT",
                         headers: {
                             "Content-Type": "application/json",
@@ -206,7 +206,7 @@ const detalle = ({ fechaIngreso, categoria, subcategoria, monto }) => {
 
 const cargarTabla = () => {
     return new Promise((resolve, reject) => {
-        fetch("/json/movimientos.json")
+        fetch("json/movimientos.json")
             .then((response) => response.json())
             .then((data) => {
                 const movimientos = data.movimientos;
@@ -225,7 +225,7 @@ const cargarTabla = () => {
 
 const saldoTotal = async () => {
     try {
-        const response = await fetch("/json/movimientos.json");
+        const response = await fetch("json/movimientos.json");
         const data = await response.json();
 
         const movimientos = data.movimientos;
