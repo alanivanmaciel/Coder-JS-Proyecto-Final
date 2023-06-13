@@ -121,92 +121,167 @@ class Ingreso {
 }
 
 let idRegistro = 0;
-const movimientos = JSON.parse(localStorage.getItem("movimientos")) || [];
-const registroMovimiento = () => {
-    const registroMovimiento = document.querySelector("#registroMovimiento");
-    registroMovimiento.addEventListener("submit", (e) => {
-        e.preventDefault();
-        const idValue = movimientos.reduce((maxId, movimiento) => {
-            return (movimiento.idRegistro > maxId) ? movimiento.idRegistro : maxId;
-        }, -1);
-        const categoria = e.target.children["categoria"].value;
-        const subcategoria = e.target.children["subcategoria"].value;
-        const monto = e.target.children["monto"].value;
-        const movimiento = new Ingreso(idValue + 1, categoria, subcategoria, monto);
-        movimientos.push(movimiento);
-        localStorage.setItem("movimientos", JSON.stringify(movimientos));
-        detalle(movimiento);
-        totalTd();
-        registroMovimiento.reset();
-        Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: `${categoria} fue agregado correctamente.`,
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 1500,
+//const movimientos = JSON.parse(localStorage.getItem("movimientos")) || [];
+
+const registroMovimiento = async () => {
+    try {
+        const registroMovimientoForm = document.querySelector("#registroMovimiento");
+        registroMovimientoForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            try {
+                const response = await fetch("json/movimientos.json");
+                const data = await response.json();
+
+                const movimientosData = data.movimientos || [];
+                const idValue = movimientosData.reduce((maxId, movimiento) => {
+                    return movimiento.idRegistro > maxId ? movimiento.idRegistro : maxId;
+                }, -1);
+
+                const categoria = e.target.children["categoria"].value;
+                const subcategoria = e.target.children["subcategoria"].value;
+                const monto = e.target.children["monto"].value;
+                const movimiento = new Ingreso(idValue + 1, categoria, subcategoria, monto);
+
+                movimientosData.push(movimiento);
+
+                try {
+                    await fetch("json/movimientos.json", {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ movimientos: movimientosData }),
+                    });
+
+                    await detalle(movimiento);
+                    totalTd();
+                    registroMovimientoForm.reset();
+
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: `${categoria} fue agregado correctamente.`,
+                        showConfirmButton: false,
+                        timerProgressBar: true,
+                        timer: 1500,
+                    });
+
+                    resolve();
+                } catch (error) {
+                    console.error("Error al guardar el movimiento:", error);
+                    reject(error);
+                }
+            } catch (error) {
+                console.error("Error al obtener los movimientos:", error);
+                reject(error);
+            }
         });
-    });
+    } catch (error) {
+        console.error("Error al agregar nuevo valor:", error);
+        reject(error);
+    }
 };
 
-//Relleno de la tabla
+
+
+
+// Relleno de la tabla
 
 const detalle = ({ fechaIngreso, categoria, subcategoria, monto }) => {
-    const tablaDetalle = document.querySelector("#tablaDetalle tbody");
-    const tr = document.createElement("tr");
+    return new Promise((resolve, reject) => {
+        const tablaDetalle = document.querySelector("#tablaDetalle tbody");
+        const tr = document.createElement("tr");
 
-    if (categoria === "Ingreso") {
-        tr.innerHTML = `
-                    <td>${fechaIngreso}</td>
-                    <td>${subcategoria}</td>
-                    <td>$${monto}</td>
-                    <td></td>
-                    `;
-    } else {
-        tr.innerHTML = `
-                    <td>${fechaIngreso}</td>
-                    <td>${subcategoria}</td>
-                    <td></td>
-                    <td>-$${monto}</td>
-                    `;
-    }
-    tablaDetalle.append(tr);
+        if (categoria === "Ingreso") {
+            tr.innerHTML = `
+          <td>${fechaIngreso}</td>
+          <td>${subcategoria}</td>
+          <td>$${monto}</td>
+          <td></td>
+        `;
+        } else {
+            tr.innerHTML = `
+          <td>${fechaIngreso}</td>
+          <td>${subcategoria}</td>
+          <td></td>
+          <td>-$${monto}</td>
+        `;
+        }
+        setTimeout(() => {
+            tablaDetalle.append(tr);
+            resolve();
+        }, 0);
+    });
 };
 
 const cargarTabla = () => {
-    movimientos.forEach(movimiento => {
-        detalle(movimiento);
+    return new Promise((resolve, reject) => {
+        fetch("json/movimientos.json")
+            .then((response) => response.json())
+            .then((data) => {
+                const movimientos = data.movimientos;
+                movimientos.forEach((movimiento) => {
+                    detalle(movimiento);
+                });
+                resolve();
+            })
+            .catch((error) => {
+                reject(error);
+            });
     });
-
 };
 
-//Calculo del total
+// Cálculo del total
 
-const saldoTotal = () => {
-    const ingresos = movimientos.reduce((total, item) => {
-        if (item.categoria === "Ingreso") {
-            return total + parseFloat(item.monto);
-        } else {
-            return total;
-        }
-    }, 0);
+const saldoTotal = async () => {
+    try {
+        const response = await fetch("json/movimientos.json");
+        const data = await response.json();
 
-    const egresos = movimientos.reduce((total, item) => {
-        if (item.categoria === "Egreso") {
-            return total + parseFloat(item.monto);
-        } else {
-            return total;
-        }
-    }, 0);
-    const final = ingresos - egresos;
-    return final;
+        const movimientos = data.movimientos;
+        const ingresos = movimientos.reduce((total, item) => {
+            if (item.categoria === "Ingreso") {
+                return total + parseFloat(item.monto);
+            } else {
+                return total;
+            }
+        }, 0);
+
+        const egresos = movimientos.reduce((total, item) => {
+            if (item.categoria === "Egreso") {
+                return total + parseFloat(item.monto);
+            } else {
+                return total;
+            }
+        }, 0);
+
+        const saldoFinal = ingresos - egresos;
+        return saldoFinal;
+    } catch (error) {
+        throw error;
+    }
 };
 
-const totalTd = () => {
+
+const totalTd = async () => {
     const tdTotal = document.querySelector("#total");
-    tdTotal.innerText = "$" + saldoTotal();
-}
+    try {
+        const total = await saldoTotal();
+        tdTotal.innerText = "$" + total;
+    } catch (error) {
+        console.error("Error al calcular el saldo total:", error);
+    }
+};
 
-totalTd()
-cargarTabla();
-registroMovimiento();
+
+totalTd();
+
+(async () => {
+    try {
+        await cargarTabla();
+        await registroMovimiento();
+    } catch (error) {
+        console.error("Error:", error);
+    }
+})();

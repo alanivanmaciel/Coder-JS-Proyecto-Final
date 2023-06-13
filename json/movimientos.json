@@ -1,0 +1,76 @@
+{
+    "movimientos": [
+      {
+        "idRegistro": 1,
+        "categoria": "Ingreso",
+        "subcategoria": "Salario",
+        "monto": 1500,
+        "fechaIngreso": "10/7/2023"
+      },
+      {
+        "idRegistro": 2,
+        "categoria": "Egreso",
+        "subcategoria": "Compras",
+        "monto": 200,
+        "fechaIngreso": "1/7/2023"
+      },
+      {
+        "idRegistro": 3,
+        "categoria": "Ingreso",
+        "subcategoria": "Ventas",
+        "monto": 800,
+        "fechaIngreso": "25/6/2023"
+      },
+      {
+        "idRegistro": 4,
+        "categoria": "Egreso",
+        "subcategoria": "Facturas",
+        "monto": 100,
+        "fechaIngreso": "26/6/2023"
+      },
+      {
+        "idRegistro": 5,
+        "categoria": "Ingreso",
+        "subcategoria": "Regalos",
+        "monto": 50,
+        "fechaIngreso": "24/7/2023"
+      },
+      {
+        "idRegistro": 6,
+        "categoria": "Egreso",
+        "subcategoria": "Transporte",
+        "monto": 30,
+        "fechaIngreso": "2/7/2023"
+      },
+      {
+        "idRegistro": 7,
+        "categoria": "Ingreso",
+        "subcategoria": "Intereses",
+        "monto": 20,
+        "fechaIngreso": "4/7/2023"
+      },
+      {
+        "idRegistro": 8,
+        "categoria": "Egreso",
+        "subcategoria": "Comida",
+        "monto": 50,
+        "fechaIngreso": "5/7/2023"
+      },
+      {
+        "idRegistro": 9,
+        "categoria": "Ingreso",
+        "subcategoria": "Bonificación",
+        "monto": 200,
+        "fechaIngreso": "30/6/2023"
+      },
+      {
+        "idRegistro": 10,
+        "categoria": "Egreso",
+        "subcategoria": "Ropa",
+        "monto": 80,
+        "fechaIngreso": "19/7/2023"
+      }
+    ]
+  }
+  
+  
