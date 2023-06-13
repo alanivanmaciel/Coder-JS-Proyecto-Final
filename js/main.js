@@ -121,39 +121,32 @@ class Ingreso {
 }
 
 let idRegistro = 0;
-//const movimientos = JSON.parse(localStorage.getItem("movimientos")) || [];
 
 const registroMovimiento = async () => {
     try {
         const registroMovimientoForm = document.querySelector("#registroMovimiento");
         registroMovimientoForm.addEventListener("submit", async (e) => {
             e.preventDefault();
-
             try {
-                const response = await fetch("json/movimientos.json");
+                const response = await fetch("/json/movimientos.json");
                 const data = await response.json();
-
                 const movimientosData = data.movimientos || [];
                 const idValue = movimientosData.reduce((maxId, movimiento) => {
                     return movimiento.idRegistro > maxId ? movimiento.idRegistro : maxId;
                 }, -1);
-
                 const categoria = e.target.children["categoria"].value;
                 const subcategoria = e.target.children["subcategoria"].value;
                 const monto = e.target.children["monto"].value;
                 const movimiento = new Ingreso(idValue + 1, categoria, subcategoria, monto);
-
                 movimientosData.push(movimiento);
-
                 try {
-                    await fetch("json/movimientos.json", {
+                    await fetch("/json/movimientos.json", {
                         method: "PUT",
                         headers: {
                             "Content-Type": "application/json",
                         },
                         body: JSON.stringify({ movimientos: movimientosData }),
                     });
-
                     await detalle(movimiento);
                     totalTd();
                     registroMovimientoForm.reset();
@@ -166,7 +159,6 @@ const registroMovimiento = async () => {
                         timerProgressBar: true,
                         timer: 1500,
                     });
-
                     resolve();
                 } catch (error) {
                     console.error("Error al guardar el movimiento:", error);
@@ -182,9 +174,6 @@ const registroMovimiento = async () => {
         reject(error);
     }
 };
-
-
-
 
 // Relleno de la tabla
 
@@ -217,7 +206,7 @@ const detalle = ({ fechaIngreso, categoria, subcategoria, monto }) => {
 
 const cargarTabla = () => {
     return new Promise((resolve, reject) => {
-        fetch("json/movimientos.json")
+        fetch("/json/movimientos.json")
             .then((response) => response.json())
             .then((data) => {
                 const movimientos = data.movimientos;
@@ -236,7 +225,7 @@ const cargarTabla = () => {
 
 const saldoTotal = async () => {
     try {
-        const response = await fetch("json/movimientos.json");
+        const response = await fetch("/json/movimientos.json");
         const data = await response.json();
 
         const movimientos = data.movimientos;
