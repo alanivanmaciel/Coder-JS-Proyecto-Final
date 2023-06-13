@@ -1,0 +1,132 @@
+* {
+    color: #E5F876;
+}
+
+body {
+    background-color: #27282D;
+}
+
+.head {
+    display: flex;
+    justify-content: end;
+    width: 100%;
+    background-color: #333333;
+    padding: 15px;
+}
+
+.head button,
+.head a,
+.head ul {
+    border: none;
+    background-color: #333333;
+    color: white;
+}
+
+.tab-content {
+    padding-right: 20px;
+}
+
+.di:hover,
+.btn:hover,
+.btn.show {
+    background-color: #333333;
+    color: #E5F876;
+}
+
+.nav,
+.tab-content {
+    padding-left: 20px;
+    justify-content: left;
+}
+
+.nav-link {
+    color: white;
+}
+
+.nav-tabs .nav-link.active {
+    color: #E5F876;
+    background-color: #27282D;
+}
+
+.swal2-input,
+.swal2-styled.swal2-confirm,
+.swal2-popup h2,
+.nav-link:hover {
+    text-align: center;
+    color: #E5F876;
+}
+
+.divCerrar {
+    display: flex;
+    justify-content: end;
+}
+
+.btnCerrar {
+    margin: 10px;
+    background-color: #E5F876;
+    color: #27282D;
+    border: none;
+    border-radius: 5px;
+}
+
+.btnCerrar:hover {
+    background-color: #E5F876;
+    color: #27282D;
+}
+
+.ocultar {
+    display: none;
+}
+
+h3 {
+    text-align: center;
+}
+
+.tabla {
+    width: 60%;
+    margin: 20px auto;
+    text-align: center;
+    border-radius: 10px;
+    background-color: #333333;
+}
+
+.tabla thead {
+    border-bottom: 1px solid #E5F876;
+}
+
+.tabla tfoot {
+    border-top: 1px solid #E5F876;
+}
+
+.form {
+    width: 60%;
+    margin: auto;
+    padding: 30px;
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    background-color: #333333;
+}
+
+.form select,
+.form input,
+.form input::placeholder,
+.form input:focus,
+.btn {
+    text-align: center;
+    color: #E5F876;
+    background-color: #393B43;
+    border: none;
+}
+
+.bton {
+    color: #E5F876;
+    border: 1px solid gray;
+}
+
+/* .swal2-styled.swal2-confirm:hover, */
+.bton:hover {
+    background-color: #E5F876;
+    color: black;
+}
